@@ -2,23 +2,33 @@ require('dotenv').config()
 
 const express = require('express') // common js
 // import express from 'express' // es modules
-const app = express()
 
-const path = require('path')
-
-// @ts-ignore
 const configViewEngine = require('./config/viewEngine')
 
 const webRoute = require('./routes/web')
+const connection = require('./config/database')
 
+const app = express()
 const port = process.env.PORT || 8888
 const hostname = process.env.HOST_NAME
+
+const path = require('path')
 
 // config template engine
 configViewEngine(app)
 
 // khai báo route
-app.use('/a', webRoute)
+app.use('/', webRoute)
+
+// A simple SELECT query
+// connection.query(
+//     // 'SELECT * FROM `table` WHERE `name` = "Page" AND `age` > 45',
+//     'select * from Users u',
+//     function (err, results, fields) {
+//         console.log('>>> ressult = ', results); // results contains rows returned by server
+//         // console.log('>>> fields = ', fields); // fields contains extra meta data about results, if available
+//     }
+// );
 
 app.listen(port, hostname, () => {
     console.log(`Example app listening on port ${port}`)
