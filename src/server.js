@@ -22,6 +22,20 @@ configViewEngine(app)
 
 // khai báo route
 app.use('/', webRoute)
+    // test connection
+    // có dấu ; (chấm phẩy)
+    ; (async () => {
+        try {
+            //error thì ko chạy nứa, tức là ra error và ko chạy code ở dưới nứa
+            await connection();
+            app.listen(port, hostname, () => {
+                console.log(`Bachend zero app listening on port ${port}`)
+            })
+        } catch (error) {
+            console.log('>>> error connect to db: ', error)
+        }
+
+    })();
 
 // A simple SELECT query
 // connection.query(
@@ -33,6 +47,6 @@ app.use('/', webRoute)
 //     }
 // );
 
-app.listen(port, hostname, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+// app.listen(port, hostname, () => {
+//     console.log(`Example app listening on port ${port}`)
+// })

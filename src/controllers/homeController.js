@@ -23,7 +23,7 @@ const getCreatePage = (req, res) => {
 
 const getUpdatePage = async (req, res) => {
     const userId = req.params.id
-    // console.log('>>> ressult = ', userId); 
+    // console.log('>>> ressult = ', userId);
     let user = await getUserById(userId)
 
     res.render('edit.ejs', { userEdit: user })
@@ -42,7 +42,7 @@ const postUpdateUser = async (req, res) => {
 
 const postDeleteUser = async (req, res) => {
     const userId = req.params.id
-    // console.log('>>> ressult = ', userId); 
+    // console.log('>>> ressult = ', userId);
     let user = await getUserById(userId)
     res.render('delete.ejs', { userEdit: user })
 }
