@@ -13,6 +13,9 @@ const port = process.env.PORT || 8888
 const hostname = process.env.HOST_NAME
 
 const path = require('path')
+// config req.body
+app.use(express.json()) // json (obj)
+app.use(express.urlencoded({ extended: true })) // form data
 
 // config template engine
 configViewEngine(app)
