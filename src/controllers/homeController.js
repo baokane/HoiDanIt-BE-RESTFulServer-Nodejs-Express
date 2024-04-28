@@ -1,9 +1,12 @@
 const connection = require('../config/database')
 const { getAllUser, getUserById, updateUserById, deleteUserById } = require('../services/CRUDService')
 
+const User = require('../models/user')
+
 const getHomePage = async (req, res) => {
     //process data
-    let results = await getAllUser()
+    // let results = await getAllUser()
+    let results = await User.find({})
     // console.log('>>> ressult = ', results); // results contains rows returned by server
     //call model
     return res.render('home', { listUsers: results })
@@ -24,7 +27,8 @@ const getCreatePage = (req, res) => {
 const getUpdatePage = async (req, res) => {
     const userId = req.params.id
     // console.log('>>> ressult = ', userId);
-    let user = await getUserById(userId)
+    // let user = await getUserById(userId)
+    let user = await User.findById(userId).exec();
 
     res.render('edit.ejs', { userEdit: user })
 }
@@ -35,7 +39,8 @@ const postUpdateUser = async (req, res) => {
     let city = req.body.mycity
     let userId = req.body.userId
     console.log('>>> :', userId, name)
-    await updateUserById(email, name, city, userId)
+    // await updateUserById(email, name, city, userId)
+    await User.updateOne({ _id: userId }, { email: email, name: name, city: city });
     // res.send('update success')
     res.redirect('/')
 }
@@ -43,14 +48,17 @@ const postUpdateUser = async (req, res) => {
 const postDeleteUser = async (req, res) => {
     const userId = req.params.id
     // console.log('>>> ressult = ', userId);
-    let user = await getUserById(userId)
+    // let user = await getUserById(userId)
+    let user = await User.findById(userId).exec();
     res.render('delete.ejs', { userEdit: user })
 }
 
 const postHandleRemoveUser = async (req, res) => {
     const id = req.body.userId
 
-    await deleteUserById(id)
+    // await deleteUserById(id)
+    let results = await User.deleteOne({ _id: id }); // returns {deletedCount: 1} : success , = 0 : fail
+    console.log('>>> ressult = ', results);
 
     res.redirect('/')
 }
@@ -64,12 +72,18 @@ const postCreateUser = async (req, res) => {
     let city = req.body.mycity
     console.log(email, name, city);
 
-    let [results, fields] = await connection.query(
-        `INSERT INTO Users  (email, name, city) VALUES (?, ?, ?)`,
-        [email, name, city]
-    );
+    await User.create({
+        email,
+        name,
+        city
+    })
 
-    console.log('>>> ressult = ', results); // results contains rows returned by server
+    // let [results, fields] = await connection.query(
+    //     `INSERT INTO Users  (email, name, city) VALUES (?, ?, ?)`,
+    //     [email, name, city]
+    // );
+
+    // console.log('>>> ressult = ', results); // results contains rows returned by server
     res.send('create success')
 
     // Bình thường :

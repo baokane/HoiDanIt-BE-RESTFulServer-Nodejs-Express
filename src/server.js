@@ -20,6 +20,10 @@ app.use(express.urlencoded({ extended: true })) // form data
 // config template engine
 configViewEngine(app)
 
+// create database with mongoose
+// const cat = new Kitten({ name: 'Hoi Dan IT model' });
+// cat.save()
+
 // khai báo route
 app.use('/', webRoute)
     // test connection
