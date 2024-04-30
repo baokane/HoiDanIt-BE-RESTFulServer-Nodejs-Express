@@ -1,4 +1,4 @@
-const User = require('../models/user')
+const User = require('../models/user.js')
 const { uploadSingleFile, uploadMultipleFiles } = require('../services/fileService')
 
 const getUsersAPI = async (req, res) => {

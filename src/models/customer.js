@@ -1,6 +1,8 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+
 const mongoose_delete = require('mongoose-delete');
 
+//shape data
 const customerSchema = new mongoose.Schema(
     {
         name: {
@@ -14,22 +16,23 @@ const customerSchema = new mongoose.Schema(
         description: String,
     },
     {
-        timestamps: true,
-
-        // static method
+        timestamps: true, // createdAt, updatedAt
         // statics: {
         //     findByHoiDanIT(name) {
         //         return this.find({ name: new RegExp(name, 'i') });
-        //     }
+        //     },
+
+        //     findByEric(name) {
+        //         return this.find({ name: new RegExp(name, 'i') });
+        //     },
         // }
-    } // tự động thêm updatedAt, createdAt
+
+    }
 );
 
-// over right lib -> nhưng test lại thì lỗi nếu ghi đè, còn không ghi đè thì ko lỗi nữa(update customer ko lỗi)
-// customerSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
-customerSchema.plugin(mongoose_delete,);
+// Override all methods
+customerSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
 
-const Customer = mongoose.model('customer', customerSchema);
+const Customer = mongoose.model('Customer', customerSchema);
 
-module.exports = Customer
-
+module.exports = Customer;
