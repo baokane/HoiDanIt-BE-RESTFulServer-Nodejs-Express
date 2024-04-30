@@ -39,23 +39,37 @@ module.exports = {
         }
     },
     getAllCustomers: async (req, res) => {
-        let customers = await getAllCustomerService()
-        console.log('customers: ', customers)
-        if (customers) {
+        let limit = req.query.limit
+        let page = req.query.page
+        let name = req.query.name
+        console.log(limit, page)
+        let result = null
+
+        if (limit && page) {
+            // C1: kiểu thổ dân
+            // result = await getAllCustomerService(limit, page, name)
+
+            // C2: lib
+            result = await getAllCustomerService(limit, page, name, req.query)
+        } else {
+            result = await getAllCustomerService()
+        }
+
+        if (result) {
             return res.status(200).json({
                 EC: 0,
-                data: customers,
+                data: result,
             })
         }
     },
     putUpdateCustomers: async (req, res) => {
-        console.log(req.body)
         const { id, name, email, address } = req.body
+        console.log('req.body: ', req.body)
         let customerData = { id, name, email, address }
         // let result = await putUpdateCustomerService(id, name, email, address)
         let result = await putUpdateCustomerService(customerData)
 
-        console.log('customers: ', result)
+        // console.log('customers: ', result)
 
         if (result) {
             return res.status(200).json({

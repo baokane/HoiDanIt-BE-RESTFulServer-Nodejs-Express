@@ -24,7 +24,10 @@ const customerSchema = new mongoose.Schema(
         // }
     } // tự động thêm updatedAt, createdAt
 );
-customerSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
+
+// over right lib -> nhưng test lại thì lỗi nếu ghi đè, còn không ghi đè thì ko lỗi nữa(update customer ko lỗi)
+// customerSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
+customerSchema.plugin(mongoose_delete,);
 
 const Customer = mongoose.model('customer', customerSchema);
 
