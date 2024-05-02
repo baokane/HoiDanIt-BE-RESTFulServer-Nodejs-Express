@@ -70,6 +70,7 @@ const putUpdateCustomerService = async (customerData) => {
 }
 
 const deleteACustomerService = async (id) => {
+    console.log('>>> id:', id)
     try {
         let result = await Customer.deleteById(id)
         return result

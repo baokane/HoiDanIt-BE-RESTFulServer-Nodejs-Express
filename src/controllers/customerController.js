@@ -4,25 +4,49 @@ const {
     putUpdateCustomerService, deleteACustomerService, deleteArrayCustomersService
 } = require('../services/customerService')
 
+const Joi = require('joi');
+
 module.exports = {
     postCreateCustomer: async (req, res) => {
         const { name, address, phone, email, description } = req.body
         console.log(name, address)
-        let imageUrl = ''
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).send('No files were uploaded.');
-        } else {
-            let result = await uploadSingleFile(req.files.image)
-            imageUrl = result.path
-            console.log('result: ', result)
-        }
-        let customerData = { name, address, phone, email, description, image: imageUrl }
-        let customer = await createCustomerService(customerData)
 
-        return res.status(200).json({
-            EC: 0,
-            data: customer,
+        // Joi lib
+        const schema = Joi.object({
+            name: Joi.string()
+                .alphanum()
+                .min(3)
+                .max(30)
+                .required(),
+
+            address: Joi.string(),
+            phone: Joi.string().pattern(new RegExp('^[0-9]{8,11}$')),
+            email: Joi.string().email(),
+            description: Joi.string(),
         })
+        const { error } = schema.validate(req.body, { abortEarly: false });
+        // console.log('>>> Joi:', result)
+        if (error) {
+            return res.status(200).json({
+                msg: error
+            })
+        } else {
+            let imageUrl = ''
+            if (!req.files || Object.keys(req.files).length === 0) {
+                return res.status(400).send('No files were uploaded.');
+            } else {
+                let result = await uploadSingleFile(req.files.image)
+                imageUrl = result.path
+                console.log('result: ', result)
+            }
+            let customerData = { name, address, phone, email, description, image: imageUrl }
+            let customer = await createCustomerService(customerData)
+
+            return res.status(200).json({
+                EC: 0,
+                data: customer,
+            })
+        }
     },
     postArrayCustomer: async (req, res) => {
         let customers = await createArrayCustomerService(req.body.customers)

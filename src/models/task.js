@@ -34,7 +34,8 @@ const taskSchema = new mongoose.Schema(
 );
 
 // Override all methods
-taskSchema.plugin(mongoose_delete, { overrideMethods: 'all' });
-const Task = mongoose.model('Task', taskSchema);
+taskSchema.plugin(mongoose_delete, { overrideMethods: ['find'] });
+// taskSchema.plugin(mongoose_delete);
+const Task = mongoose.model('task', taskSchema);
 
 module.exports = Task;
